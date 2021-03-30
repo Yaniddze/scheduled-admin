@@ -10,7 +10,7 @@ export const TeacherEdit: React.FC = props => {
   return (
     <Edit {...props} undoable={false}>
       <SimpleForm>
-        <TextInput validate={required()} source="name" fullWidth helperText="имя вакцины" label="имя" />
+        <TextInput validate={required()} source="name" fullWidth helperText="имя преподавателя" label="имя" />
       </SimpleForm>
     </Edit>
   )

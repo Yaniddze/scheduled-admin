@@ -18,6 +18,12 @@ import {
   TeacherList,
 } from './entities/teachers';
 
+import {
+  SubjectCreate,
+  SubjectEdit,
+  SubjectList,
+} from './entities/subject';
+
 const russianMessages = require('ra-language-russian');
 
 const i18nProvider = polyglotI18nProvider(() => russianMessages, 'ru');
@@ -47,6 +53,16 @@ export default function App() {
         icon={PostIcon} 
         options={{
           label: 'Преподаватели'
+        }} 
+      />
+
+      <Resource name="subject" 
+        list={SubjectList} 
+        create={SubjectCreate}
+        edit={SubjectEdit}
+        icon={PostIcon} 
+        options={{
+          label: 'Предметы'
         }} 
       />
 
