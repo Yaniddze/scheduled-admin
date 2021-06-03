@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import {
   Datagrid,
   List,
@@ -6,21 +6,107 @@ import {
   Filter,
   TextInput,
   ReferenceField,
-} from 'react-admin';
+  Toolbar,
+} from "react-admin";
+
+import { Button, Dialog, Input } from "@material-ui/core";
 
 const SearchFilter: React.FC<any> = (props) => (
   <Filter {...props}>
-    <TextInput label="поиск" source="name" />
+    <TextInput label='поиск' source='name' />
   </Filter>
 );
 
-export const SubjectList: React.FC = props => {
+const Tools = () => {
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [error, setError] = useState("");
+  const [file, setFile] = useState<File | undefined>(undefined);
+
+  const handleSubmit = () => {
+    if (file === undefined) {
+      setError("Выберите файл");
+      return;
+    }
+
+    const splitted = file.name.split(".");
+    splitted.reverse();
+
+    if (splitted[0] !== "doc" && splitted[0] !== "docx") {
+      setError("Выберите файл word");
+      return;
+    }
+
+    setError("");
+
+    const headers = new Headers();
+
+    headers.append(
+      "Authorization",
+      "Bearer " + (localStorage.getItem("token") || "")
+    );
+
+    const date = new FormData();
+
+    date.append("file", file);
+
+    fetch("/admin/api/v1/subject/parse", {
+      method: "POST",
+      headers,
+      body: date,
+    }).then(() => {
+      setOpen(false);
+      setOpen2(true);
+    });
+  };
+
   return (
-    <List {...props} filters={<SearchFilter />} title="Список преподавателей">
-      <Datagrid rowClick="edit" isRowSelectable={r => false}>
-        <TextField source="name" label="имя" />
-        <ReferenceField label="Преподаватель" reference="teacher" source="teacherId">
-            <TextField source="name" label="имя" />
+    <Toolbar>
+      <Dialog open={open2} onClose={() => setOpen2(false)}>
+        <div style={{ padding: "20px" }}>
+          <div>Вы успешно загрузили файл!</div>
+          <div>
+            <Button onClick={() => setOpen2(false)}>Закрыть</Button>
+          </div>
+        </div>
+      </Dialog>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <div style={{ padding: "100px" }}>
+          <div style={{ color: "red" }}>{error}</div>
+          <input
+            type='file'
+            accept='.doc,.docx'
+            onChange={(e) => {
+              const files = e.target.files;
+              if (files) setFile(files[0]);
+            }}
+          />
+          <div style={{ marginTop: "20px" }}>
+            <Button onClick={handleSubmit}>Отправить</Button>
+          </div>
+        </div>
+      </Dialog>
+      <Button onClick={() => setOpen(true)}>Загрузить файл</Button>
+    </Toolbar>
+  );
+};
+
+export const SubjectList: React.FC = (props) => {
+  return (
+    <List
+      actions={<Tools />}
+      {...props}
+      filters={<SearchFilter />}
+      title='Список преподавателей'
+    >
+      <Datagrid rowClick='edit' isRowSelectable={(r) => false}>
+        <TextField source='name' label='имя' />
+        <ReferenceField
+          label='Преподаватель'
+          reference='teacher'
+          source='teacherId'
+        >
+          <TextField source='name' label='имя' />
         </ReferenceField>
       </Datagrid>
     </List>
