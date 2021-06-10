@@ -1,4 +1,3 @@
-import Menu from './Menu';
-import {ListActions} from './Actions';
+import { ListActions } from "./Actions";
 
-export {Menu, ListActions};
+export { ListActions };
