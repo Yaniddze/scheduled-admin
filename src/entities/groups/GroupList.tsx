@@ -6,6 +6,9 @@ import {
   Filter,
   TextInput,
   downloadCSV,
+  ArrayField,
+  SingleFieldList,
+  ChipField,
 } from "react-admin";
 import { ExportToCsv } from "export-to-csv";
 
@@ -41,6 +44,12 @@ export const GroupList: React.FC = (props) => {
     >
       <Datagrid rowClick='edit' isRowSelectable={(r) => false}>
         <TextField source='name' label='название' />
+
+        <ArrayField source='teachers' label='Преподаватели'>
+          <SingleFieldList>
+            <ChipField source='name' />
+          </SingleFieldList>
+        </ArrayField>
       </Datagrid>
     </List>
   );
