@@ -1,5 +1,29 @@
 import React, { useState } from "react";
-import { Datagrid, List, TextField, Filter, TextInput } from "react-admin";
+import {
+  Datagrid,
+  List,
+  TextField,
+  Filter,
+  TextInput,
+  downloadCSV,
+} from "react-admin";
+import { ExportToCsv } from "export-to-csv";
+
+const exporter = (records: any) => {
+  const options = {
+    fieldSeparator: ",",
+    quoteStrings: '"',
+    decimalSeparator: ".",
+    showLabels: true,
+    showTitle: true,
+    title: "groups",
+    useTextFile: false,
+    useBom: true,
+    useKeysAsHeaders: true,
+  };
+  const exporter = new ExportToCsv(options);
+  exporter.generateCsv(records);
+};
 
 const SearchFilter: React.FC<any> = (props) => (
   <Filter {...props}>
@@ -9,7 +33,12 @@ const SearchFilter: React.FC<any> = (props) => (
 
 export const GroupList: React.FC = (props) => {
   return (
-    <List {...props} filters={<SearchFilter />} title='Список групп'>
+    <List
+      {...props}
+      filters={<SearchFilter />}
+      title='Список групп'
+      exporter={exporter as any}
+    >
       <Datagrid rowClick='edit' isRowSelectable={(r) => false}>
         <TextField source='name' label='название' />
       </Datagrid>

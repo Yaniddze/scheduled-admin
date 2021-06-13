@@ -12,7 +12,9 @@
     "@types/node": "^12.19.9",
     "@types/react": "^16.14.2",
     "@types/react-dom": "^16.9.10",
+    "export-to-csv": "^0.2.1",
     "http-proxy-middleware": "^1.0.6",
+    "jsonexport": "^3.2.0",
     "qs": "^6.9.4",
     "ra-data-json-server": "^3.11.0",
     "ra-language-russian": "^3.3.0",
@@ -50,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@types/jsonexport": "^3.0.1",
     "@types/qs": "^6.9.5",
     "@types/react-google-recaptcha": "^2.1.0",
     "@types/react-redux": "^7.1.12",

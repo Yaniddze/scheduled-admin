@@ -7,9 +7,27 @@ import {
   TextInput,
   ReferenceField,
   Toolbar,
+  downloadCSV,
+  ExportButton,
 } from "react-admin";
-
 import { Button, Dialog, Input } from "@material-ui/core";
+import { ExportToCsv } from "export-to-csv";
+
+const exporter = (records: any) => {
+  const options = {
+    fieldSeparator: ",",
+    quoteStrings: '"',
+    decimalSeparator: ".",
+    showLabels: true,
+    showTitle: true,
+    title: "subjects",
+    useTextFile: false,
+    useBom: true,
+    useKeysAsHeaders: true,
+  };
+  const exporter = new ExportToCsv(options);
+  exporter.generateCsv(records);
+};
 
 const SearchFilter: React.FC<any> = (props) => (
   <Filter {...props}>
@@ -87,6 +105,7 @@ const Tools = () => {
         </div>
       </Dialog>
       <Button onClick={() => setOpen(true)}>Загрузить файл</Button>
+      <ExportButton />
     </Toolbar>
   );
 };
@@ -98,6 +117,7 @@ export const SubjectList: React.FC = (props) => {
       {...props}
       filters={<SearchFilter />}
       title='Список преподавателей'
+      exporter={exporter as any}
     >
       <Datagrid rowClick='edit' isRowSelectable={(r) => false}>
         <TextField source='name' label='имя' />
